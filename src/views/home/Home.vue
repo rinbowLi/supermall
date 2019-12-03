@@ -3,29 +3,124 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :bannerList="bannerList"></home-swiper>
-    <recommend-view :recommendList="recommendList"></recommend-view>
+    <home-swiper :bannerList="bannerList" />
+    <recommend-view :recommendList="recommendList" />
+    <Feature />
+    <TabControl class="tabControl" :titles="['流行','新款','精选']"/>
+    <ul>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+    </ul>
   </div>
 </template>
 
 <script>
-import navBar from "components/common/navbar/NavBar";
 import HomeSwiper from "./childCompoents/HomeSwiper";
-import RecommendView from './childCompoents/RecommendView'
+import RecommendView from "./childCompoents/RecommendView";
+import Feature from "./childCompoents/FeatureView";
+
+import navBar from "components/common/navbar/NavBar";
+import TabControl from "components/content/tabControl/TabControl";
+
 import { getHomeMultiData } from "network/home";
 export default {
   name: "home",
   components: {
-    navBar,
     HomeSwiper,
-    RecommendView
+    RecommendView,
+    Feature,
+    navBar,
+    TabControl
   },
   data() {
     return {
       bannerList: [],
       dKeywordList: [],
       keywordList: [],
-      recommendList: []
+      recommendList: [],
+      goods: {
+        "pop":{page:0,list: []},
+        "news":{page:0,list: []},
+        "sell":{page:0,list: []},
+      }
     };
   },
   created() {
@@ -40,8 +135,20 @@ export default {
 </script>
 
 <style>
+#home {
+  padding-top: 44px;
+}
 .home-nav {
   background-color: var(--color-tint);
   color: #ffffff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 9;
+}
+.tabControl{
+  position: sticky;
+  top:44px;
 }
 </style>
