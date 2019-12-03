@@ -6,7 +6,7 @@
     <home-swiper :bannerList="bannerList" />
     <recommend-view :recommendList="recommendList" />
     <Feature />
-    <TabControl class="tabControl" :titles="['流行','新款','精选']"/>
+    <TabControl class="tabControl" :titles="['流行','新款','精选']" />
     <ul>
       <li>1</li>
       <li>1</li>
@@ -100,7 +100,7 @@ import Feature from "./childCompoents/FeatureView";
 import navBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 
-import { getHomeMultiData } from "network/home";
+import { getHomeMultiData, getHomeGoods } from "network/home";
 export default {
   name: "home",
   components: {
@@ -117,19 +117,35 @@ export default {
       keywordList: [],
       recommendList: [],
       goods: {
-        "pop":{page:0,list: []},
-        "news":{page:0,list: []},
-        "sell":{page:0,list: []},
+        pop: { page: 0, list: [] },
+        new: { page: 0, list: [] },
+        sell: { page: 0, list: [] }
       }
     };
   },
   created() {
-    getHomeMultiData().then(res => {
-      this.bannerList = res.data.banner.list;
-      this.dKeywordList = res.data.dKeyword.list;
-      this.keywordList = res.data.keywords.list;
-      this.recommendList = res.data.recommend.list;
-    });
+    this.getHomeMultiData();
+    this.getHomeGoods("pop");
+    this.getHomeGoods("new");
+    this.getHomeGoods("sell");
+  },
+  methods: {
+    getHomeMultiData() {
+      getHomeMultiData().then(res => {
+        this.bannerList = res.data.banner.list;
+        this.dKeywordList = res.data.dKeyword.list;
+        this.keywordList = res.data.keywords.list;
+        this.recommendList = res.data.recommend.list;
+      });
+    },
+    getHomeGoods(type) {
+      const page = this.goods[type].page + 1;
+      getHomeGoods(type, page).then(res => {
+        console.log(res)
+        this.goods[type].list.push(...res.data.list);
+        this.goods[type].page++;
+      });
+    }
   }
 };
 </script>
@@ -147,8 +163,8 @@ export default {
   right: 0;
   z-index: 9;
 }
-.tabControl{
+.tabControl {
   position: sticky;
-  top:44px;
+  top: 44px;
 }
 </style>
