@@ -131,7 +131,6 @@ export default {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page++;
         this.$refs.scroll.finishPullUp();
-        console.log(223213);
       });
     },
     backClick() {
