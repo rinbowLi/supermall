@@ -3,7 +3,14 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="content" ref="scroll" :probeType="3" @scroll="contentScroll">
+    <scroll
+      class="content"
+      ref="scroll"
+      :probeType="3"
+      @scroll="contentScroll"
+      :pullUpLoad="true"
+      @pullingUp="loadMore"
+    >
       <home-swiper :bannerList="bannerList" />
       <recommend-view :recommendList="recommendList" />
       <Feature />
@@ -64,7 +71,11 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
-  mounted() {},
+  mounted() {
+    this.$bus.$on("itemImgLoad", () => {
+      this.$refs.scroll.refresh();
+    });
+  },
   methods: {
     tabClick(index) {
       switch (index) {
@@ -94,6 +105,7 @@ export default {
         console.log(res);
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page++;
+        this.$refs.scroll.finishPullUp();
       });
     },
     backClick() {
@@ -101,6 +113,10 @@ export default {
     },
     contentScroll(position) {
       this.isShowBackTop = -position.y > 1000 ? true : false;
+    },
+    loadMore() {
+      this.getHomeGoods(this.curType);
+      this.$refs.scroll.refresh();
     }
   }
 };

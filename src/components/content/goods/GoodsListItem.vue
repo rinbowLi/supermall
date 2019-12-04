@@ -1,36 +1,43 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img">
+    <img :src="goodsItem.show.img" @load="imgLoad" />
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
-      <span class="collect"><img src="~assets/img/common/collect.svg"/>{{goodsItem.cfav}}</span>
+      <span class="collect">
+        <img src="~assets/img/common/collect.svg" />
+        {{goodsItem.cfav}}
+      </span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name:"GoodsListItem",
-  props:{
+  name: "GoodsListItem",
+  props: {
     goodsItem: {
-      type:Object,
-      default(){
-        return {}
+      type: Object,
+      default() {
+        return {};
       }
     }
+  },
+  methods: {
+    imgLoad() {
+      this.$bus.$emit("itemImgLoad");
+    }
   }
-
-}
+};
 </script>
 
 <style lang="less" scoped>
-.goods-item{
+.goods-item {
   padding-bottom: 40px;
   position: relative;
   width: 48%;
 }
-.goods-item img{
+.goods-item img {
   width: 100%;
   border-radius: 5px;
 }
@@ -40,7 +47,7 @@ export default {
   bottom: 5px;
   left: 0;
   right: 0;
-  overflow:hidden;
+  overflow: hidden;
   text-align: center;
 }
 .goods-info p {
@@ -49,14 +56,14 @@ export default {
   white-space: nowrap;
   margin-bottom: 3px;
 }
-.goods-info .price{
+.goods-info .price {
   color: var(--color-high-text);
   margin-right: 20px;
 }
 .goods-info .collect {
-position: relative;
+  position: relative;
 }
-.goods-info .collect img{
+.goods-info .collect img {
   position: absolute;
   left: -15px;
   top: -1px;
