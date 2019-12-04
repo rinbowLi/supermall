@@ -5,16 +5,29 @@ import Home from 'views/home/Home'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
-    name: 'home',
-    component: Home,
+    redirect: '/home'
   },
   {
     path: '/home',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/category',
+    name: 'category',
+    component: () => import("views/category/Category")
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import("views/cart/Cart")
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import("views/profile/Profile")
   }
 ]
 

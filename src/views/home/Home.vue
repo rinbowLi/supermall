@@ -3,92 +3,14 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :bannerList="bannerList" />
-    <recommend-view :recommendList="recommendList" />
-    <Feature />
-    <TabControl class="tabControl" :titles="['流行','新款','精选']" />
-    <ul>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-    </ul>
+    <scroll class="content" ref="scroll" :probeType="3" @scroll="contentScroll">
+      <home-swiper :bannerList="bannerList" />
+      <recommend-view :recommendList="recommendList" />
+      <Feature />
+      <TabControl class="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick" />
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
+    <back-top @click.native="backClick" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -99,6 +21,9 @@ import Feature from "./childCompoents/FeatureView";
 
 import navBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
+import GoodsList from "components/content/goods/GoodsList";
+import Scroll from "components/common/scroll/Scroll";
+import BackTop from "components/content/backTop/BackTop";
 
 import { getHomeMultiData, getHomeGoods } from "network/home";
 export default {
@@ -108,7 +33,10 @@ export default {
     RecommendView,
     Feature,
     navBar,
-    TabControl
+    TabControl,
+    GoodsList,
+    Scroll,
+    BackTop
   },
   data() {
     return {
@@ -120,8 +48,15 @@ export default {
         pop: { page: 0, list: [] },
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] }
-      }
+      },
+      curType: "pop",
+      isShowBackTop: false
     };
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.curType].list;
+    }
   },
   created() {
     this.getHomeMultiData();
@@ -129,7 +64,22 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
+  mounted() {},
   methods: {
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.curType = "pop";
+          break;
+        case 1:
+          this.curType = "new";
+          break;
+        case 2:
+          this.curType = "sell";
+          break;
+      }
+    },
+    //网络请求
     getHomeMultiData() {
       getHomeMultiData().then(res => {
         this.bannerList = res.data.banner.list;
@@ -141,18 +91,26 @@ export default {
     getHomeGoods(type) {
       const page = this.goods[type].page + 1;
       getHomeGoods(type, page).then(res => {
-        console.log(res)
+        console.log(res);
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page++;
       });
+    },
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0, 500);
+    },
+    contentScroll(position) {
+      this.isShowBackTop = -position.y > 1000 ? true : false;
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 #home {
   padding-top: 44px;
+  height: 100vh;
+  position: relative;
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -166,5 +124,14 @@ export default {
 .tabControl {
   position: sticky;
   top: 44px;
+  z-index: 9;
+}
+.content {
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  left: 0;
+  right: 0;
+  bottom: 49px;
 }
 </style>

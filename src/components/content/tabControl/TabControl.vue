@@ -28,9 +28,12 @@ export default {
       curIndex: 0
     };
   },
-  methods:{
-    itemClick(index){
-      this.curIndex =index
+  methods: {
+    itemClick(index) {
+      if (this.curIndex != index) {
+        this.curIndex = index;
+        this.$emit("tabClick", index);
+      }
     }
   }
 };
@@ -48,13 +51,13 @@ export default {
 .tab-control-item {
   flex: 1;
 }
-.tab-control-item span{
+.tab-control-item span {
   padding: 5px;
 }
 .active {
   color: var(--color-high-text);
 }
-.active span{
-    border-bottom: 3px solid var(--color-tint);
+.active span {
+  border-bottom: 3px solid var(--color-tint);
 }
 </style>
