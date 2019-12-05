@@ -3,8 +3,8 @@
     <div class="info-title">{{goods.title}}</div>
     <div class="info-price">
       <span class="n-price">{{goods.newPrice}}</span>
-      <span class="o-price">{{goods.oldPrice}}</span>
-      <span class="discount">{{goods.discount}}</span>
+      <span class="o-price" v-if="goods.oldPrice">{{goods.oldPrice}}</span>
+      <span class="discount" v-if="goods.discount">{{goods.discount}}</span>
     </div>
     <div class="info-other">
       <span>{{goods.columns[0]}}</span>
@@ -71,7 +71,7 @@ export default {
 
   /*让元素上浮一些: 使用相对定位即可*/
   position: relative;
-  top: -8px;
+  top: -5px;
 }
 
 .info-other {
