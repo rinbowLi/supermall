@@ -48,6 +48,9 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh();
+    },
+    getCurY() {
+      return this.scroll.y || 0;
     }
   }
 };

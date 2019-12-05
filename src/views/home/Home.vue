@@ -72,7 +72,8 @@ export default {
       curType: "pop",
       isShowBackTop: false,
       tabOffsetTop: 0,
-      isShowTabControl: false
+      isShowTabControl: false,
+      saveY: 0
     };
   },
   computed: {
@@ -92,6 +93,13 @@ export default {
     this.$bus.$on("itemImgLoad", () => {
       refresh();
     });
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getCurY();
   },
   methods: {
     tabClick(index) {
