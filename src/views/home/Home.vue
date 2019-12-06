@@ -45,7 +45,8 @@ import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backTop/BackTop";
 
 import { getHomeMultiData, getHomeGoods } from "network/home";
-import { debounce, throttle } from "components/common/utils/utils";
+import { throttle } from "@/common/utils";
+import { itemListenerMixin } from "@/common/mixin";
 export default {
   name: "home",
   components: {
@@ -58,6 +59,7 @@ export default {
     Scroll,
     BackTop
   },
+  mixins: [itemListenerMixin],
   data() {
     return {
       bannerList: [],
@@ -73,7 +75,7 @@ export default {
       isShowBackTop: false,
       tabOffsetTop: 0,
       isShowTabControl: false,
-      saveY: 0
+      saveY: 0,
     };
   },
   computed: {
@@ -87,19 +89,16 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
-  mounted() {
-    const refresh =
-      this.$refs.scroll && debounce(this.$refs.scroll.refresh, 100);
-    this.$bus.$on("itemImgLoad", () => {
-      refresh();
-    });
-  },
+  mounted() {},
   activated() {
     this.$refs.scroll.scrollTo(0, this.saveY, 0);
     this.$refs.scroll.refresh();
   },
   deactivated() {
     this.saveY = this.$refs.scroll.getCurY();
+
+    //离开页面取消监听时间总线itemImgLoad
+    this.$bus.$off("itemImgLoad", this.itemIamgeFunc);
   },
   methods: {
     tabClick(index) {

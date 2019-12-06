@@ -33,8 +33,9 @@ export default {
   methods: {
     HandleClick(index) {
       this.curIndex = index;
+      this.$emit("titleClick", index);
     },
-    BackCLick(){
+    BackCLick() {
       this.$router.back();
     }
   }
@@ -52,7 +53,7 @@ export default {
 .active {
   color: var(--color-high-text);
 }
-.back img{
+.back img {
   margin-top: 13px;
 }
 </style>
