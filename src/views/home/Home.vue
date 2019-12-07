@@ -42,11 +42,11 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import BackTop from "components/content/backTop/BackTop";
+
 
 import { getHomeMultiData, getHomeGoods } from "network/home";
 import { throttle } from "@/common/utils";
-import { itemListenerMixin } from "@/common/mixin";
+import { itemListenerMixin ,backTopMixin} from "@/common/mixin";
 export default {
   name: "home",
   components: {
@@ -57,9 +57,8 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin,backTopMixin],
   data() {
     return {
       bannerList: [],
@@ -72,7 +71,6 @@ export default {
         sell: { page: 0, list: [] }
       },
       curType: "pop",
-      isShowBackTop: false,
       tabOffsetTop: 0,
       isShowTabControl: false,
       saveY: 0,
@@ -132,9 +130,6 @@ export default {
         this.goods[type].page++;
         this.$refs.scroll.finishPullUp();
       });
-    },
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
     },
     contentScroll(position) {
       this.isShowBackTop = -position.y > 1000 ? true : false;

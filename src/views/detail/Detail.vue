@@ -1,7 +1,7 @@
 <template>
   <div class="Detail">
-    <detail-nav-bar class="datail-nav" @titleClick="titleClick" />
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="datail-nav" @titleClick="titleClick" ref="datailNav" />
+    <scroll class="content" ref="scroll" @scroll="detailScroll" :probeType="3">
       <detail-swiper class="topImg" :topImg="topImg" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -10,6 +10,8 @@
       <detail-comment-info :commentInfo="commentInfo" ref="comment" />
       <goods-list :goods="recommendInfo" ref="recommend" />
     </scroll>
+    <detail-bottom-bar @addCart="addToCart" />
+    <back-top @click.native="backClick" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -22,11 +24,12 @@ import DetailGoodsInfo from "./childComponents/DetailGoodsInfo";
 import DetailParamInfo from "./childComponents/DetailParamInfo";
 import DetailCommentInfo from "./childComponents/DeatilCommentInfo";
 import GoodsList from "components/content/goods/GoodsList";
+import DetailBottomBar from "./childComponents/DetailBottomBar";
 
 import Scroll from "components/common/scroll/Scroll";
 
-import { itemListenerMixin } from "@/common/mixin";
-import {debounce} from "@/common/utils";
+import { itemListenerMixin, backTopMixin } from "@/common/mixin";
+import { debounce } from "@/common/utils";
 
 import {
   getDetail,
@@ -47,9 +50,10 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     GoodsList,
+    DetailBottomBar,
     Scroll
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   data() {
     return {
       iid: null,
@@ -61,7 +65,7 @@ export default {
       commentInfo: {},
       recommendInfo: [],
       scrollToY: [0, 0, 0, 0],
-      getOffsetTopFunc:null
+      getOffsetTopFunc: null
     };
   },
   created() {
@@ -93,14 +97,13 @@ export default {
         this.commentInfo = data.rate.list[0];
       }
 
-     this.getOffsetTopFunc = debounce(()=>{
+      this.getOffsetTopFunc = debounce(() => {
         this.scrollToY = [];
-      this.scrollToY.push(0);
-      this.scrollToY.push(this.$refs.param.$el.offsetTop);
-      this.scrollToY.push(this.$refs.comment.$el.offsetTop);
-      this.scrollToY.push(this.$refs.recommend.$el.offsetTop);
-      console.log( this.scrollToY)
-     },100)
+        this.scrollToY.push(0);
+        this.scrollToY.push(this.$refs.param.$el.offsetTop);
+        this.scrollToY.push(this.$refs.comment.$el.offsetTop);
+        this.scrollToY.push(this.$refs.recommend.$el.offsetTop);
+      }, 100);
     });
     //获取推荐数据
     getRecommend().then(res => {
@@ -119,6 +122,29 @@ export default {
       console.log(index);
       this.$refs.scroll.scrollTo(0, -this.scrollToY[index], 500);
     },
+    detailScroll(position) {
+      const positionY = -position.y;
+      for (let i = 0; i < this.scrollToY.length; i++) {
+        if (positionY >= this.scrollToY[i]) {
+          this.$refs.datailNav.curIndex = i;
+        }
+      }
+      this.isShowBackTop = -position.y > 1000 ? true : false;
+    },
+    addToCart() {
+    
+      //组装购物车里需要展示的信息；
+      const product = {};
+      product.image = this.topImg[0];
+      product.title = this.goods.title;
+      product.desc = this.detailInfo.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+        console.log(product);
+
+      //添加到购物车
+      this.$store.dispatch("addToCart", product);
+    }
   }
 };
 </script>
@@ -136,6 +162,6 @@ export default {
   background-color: #fff;
 }
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 49px);
 }
 </style>
