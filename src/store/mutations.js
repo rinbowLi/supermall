@@ -7,7 +7,6 @@ export default {
     state.cartList.push(playLoad);
   },
   checkAll(state, playLoad) {
-    console.log(playLoad)
     state.cartList.map(i => {
       i.checked = playLoad;
     })

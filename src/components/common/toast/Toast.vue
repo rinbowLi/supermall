@@ -13,7 +13,6 @@ export default {
   },
   methods:{
     show(message,time = 2000){
-      console.log()
       this.message = message;
       this.isShow = true;
       setTimeout(()=>{
