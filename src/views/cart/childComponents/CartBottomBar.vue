@@ -58,6 +58,10 @@ export default {
   display: flex;
   align-items: center;
   font-size: 14px;
+  position: fixed;
+  bottom: 49px;
+  left: 0;
+  width: 100%;
 }
 .checkAllArea {
   display: flex;

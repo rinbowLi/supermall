@@ -111,6 +111,9 @@ export default {
   left: 10px;
   right: 10px;
 }
+.item-price{
+  line-height: 30px;
+}
 
 .info-bottom .item-price {
   color: orangered;
@@ -128,6 +131,7 @@ export default {
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px;
   text-align: center;
+  line-height: 28px;
 }
 .add {
   background-color: #fff;
@@ -136,6 +140,7 @@ export default {
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   text-align: center;
+  line-height: 28px;
 }
 .count {
   width: 50px;
@@ -144,5 +149,6 @@ export default {
   text-align: center;
   border-right: none;
   border-left: none;
+  height: 30px;
 }
 </style>
