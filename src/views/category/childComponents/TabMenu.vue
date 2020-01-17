@@ -54,6 +54,7 @@ export default {
   bottom: 49px;
   width: 100px;
   display: flex;
+  overflow: hidden;
 }
 #tab-menu {
   background-color: #f6f6f6;

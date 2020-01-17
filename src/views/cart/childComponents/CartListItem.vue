@@ -15,7 +15,11 @@
       <div class="item-desc">商品描述: {{product.desc}}</div>
       <div class="info-bottom">
         <div class="item-price left">¥{{product.price}}</div>
-        <div class="item-count right">x{{product.count}}</div>
+        <div class="item-count right">
+          <div class="decrease" @click="decreaseCount">-</div>
+          <input type="number" class="count" v-model="product.count" />
+          <div class="add" @click="addCount">+</div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,9 +37,20 @@ export default {
     CheckButton
   },
   methods: {
-    checkedChange () {
+    checkedChange() {
       this.product.checked = !this.product.checked;
     },
+    decreaseCount() {
+      if (this.product.count <= 1) {
+        this.product.count = 1;
+        this.$toast.show("数量不能在减少了哦", 1500);
+        return;
+      }
+      this.product.count--;
+    },
+    addCount() {
+      this.product.count++;
+    }
   }
 };
 </script>
@@ -99,5 +114,35 @@ export default {
 
 .info-bottom .item-price {
   color: orangered;
+}
+.item-count {
+  display: flex;
+}
+.right {
+  width: 100px;
+}
+.decrease {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: 20px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  text-align: center;
+}
+.add {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: 20px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+  text-align: center;
+}
+.count {
+  width: 50px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  border-right: none;
+  border-left: none;
 }
 </style>
