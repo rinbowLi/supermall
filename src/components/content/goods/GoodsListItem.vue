@@ -33,12 +33,14 @@ export default {
       this.$bus.$emit("itemImgLoad");
     },
     goToDetail() {
-      var id = this.goodsItem.iid || this.goodsItem.item_id;
-      this.$router.push({
-        path: "/detail",
-        name: "detail",
-        params: { iid: id }
-      });
+      if (this.$route.fullPath.indexOf("/detail") === -1) {
+        var id = this.goodsItem.iid || this.goodsItem.item_id;
+        this.$router.push({
+          path: "/detail",
+          name: "detail",
+          params: { iid: id }
+        });
+      }
     }
   }
 };

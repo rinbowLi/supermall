@@ -83,6 +83,12 @@ export default {
   destroyed() {
     this.$bus.$off("itemImgLoad", this.itemIamgeFunc);
   },
+  watch: {
+    //监听相同路由下参数变化的时候，从而实现异步刷新
+    $route() {
+      this.loadData();
+    }
+  },
   methods: {
     ...mapActions(["addToCart"]),
     imgLoad() {

@@ -4,8 +4,8 @@ export function request(config) {
   //创建实例
   const server = axios.create({
   
-    baseURL : "http://123.207.32.32:8000/api/hy",
-//baseURL : "http://106.54.54.237:8000/api/hy"
+    //baseURL : "http://123.207.32.32:8000/api/hy",
+     baseURL : "http://106.54.54.237:8000/api/hy",
     timeout:5000,
     // proxy:{    //跨域代理
     //   '/api': {
