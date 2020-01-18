@@ -46,6 +46,7 @@ export default {
 }
 .scroll {
   height: 100%;
+  overflow: hidden;
 }
 .panel img {
   width: 100%;
